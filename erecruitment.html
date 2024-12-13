@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eRecruitment Platform</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        header {
+            background-color: #063c72;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .job-post {
+            border-bottom: 1px solid #ddd;
+            padding: 15px 0;
+        }
+        .job-post:last-child {
+            border-bottom: none;
+        }
+        .job-post h3 {
+            margin: 0;
+            color: #063c72;
+        }
+        .job-post p {
+            margin: 5px 0 10px;
+        }
+        .apply-btn {
+            background-color: #63c6f2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .apply-btn:hover {
+            background-color: #045a9e;
+        }
+        #chatbot {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #63c6f2;
+            color: white;
+            padding: 15px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        .branding {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .branding img {
+            max-width: 100px;
+        }
+    </style>
+    <script>
+        // Encryption function for sensitive data
+        function encryptData(data) {
+            const encoder = new TextEncoder();
+            const encodedData = encoder.encode(data);
+            return window.crypto.subtle.digest("SHA-256", encodedData).then(hashBuffer => {
+                return Array.from(new Uint8Array(hashBuffer))
+                    .map(byte => byte.toString(16).padStart(2, '0'))
+                    .join('');
+            });
+        }
+
+        // Securely handle user input
+        function suggestJobs() {
+            const userSkills = prompt("Enter your skills (comma-separated):");
+            if (userSkills) {
+                encryptData(userSkills).then(encryptedSkills => {
+                    console.log("Encrypted skills for security:", encryptedSkills);
+
+                    const skillsArray = userSkills.split(",").map(skill => skill.trim().toLowerCase());
+                    const jobPosts = document.querySelectorAll(".job-post");
+
+                    jobPosts.forEach(post => {
+                        const jobSkills = post.querySelector("p:nth-child(4)").textContent.toLowerCase();
+                        const isMatch = skillsArray.some(skill => jobSkills.includes(skill));
+
+                        if (!isMatch) {
+                            post.style.display = "none";
+                        } else {
+                            post.style.display = "block";
+                        }
+                    });
+                });
+            }
+        }
+
+        // Add a secure logout function
+        function secureLogout() {
+            alert("You have been securely logged out.");
+            window.location.href = "/logout"; // Redirect to a secure logout page
+        }
+
+        // Chatbot integration
+        function openChatbot() {
+            alert("Hello! I am here to assist you with your queries.");
+        }
+
+        // Resume parsing simulation
+        function parseResume() {
+            const resumeInput = document.createElement('input');
+            resumeInput.type = 'file';
+            resumeInput.accept = '.pdf,.doc,.docx';
+            resumeInput.onchange = () => {
+                const file = resumeInput.files[0];
+                if (file) {
+                    alert(`Parsing resume: ${file.name}`);
+                    // Simulate parsing logic
+                    setTimeout(() => {
+                        alert("Resume parsed successfully. Matching jobs will be displayed.");
+                    }, 2000);
+                }
+            };
+            resumeInput.click();
+        }
+
+        // Display metrics for job postings
+        function displayMetrics() {
+            alert("Job Metrics:\n\n- Applicant Response Rate: 85%\n- Diversity: 40%\n- Average Job Views: 200");
+        }
+    </script>
+</head>
+<body>
+
+<header>
+    <h1>Welcome to eRecruitment Platform</h1>
+    <div class="branding">
+        <img src="logo.png" alt="Organization Logo">
+        <p>Your Path to a Better Career</p>
+    </div>
+    <button onclick="suggestJobs()" style="background-color: #63c6f2; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">Find Jobs Matching My Skills</button>
+    <button onclick="secureLogout()" style="background-color: #f56c6c; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-left: 10px;">Logout</button>
+    <button onclick="parseResume()" style="background-color: #63c6f2; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-left: 10px;">Upload Resume</button>
+    <button onclick="displayMetrics()" style="background-color: #63c6f2; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-left: 10px;">View Metrics</button>
+</header>
+
+<div class="container">
+    <h2>Available Job Postings</h2>
+
+    <div class="job-post">
+        <h3>Veteran-Friendly: Software Developer</h3>
+        <p>Location: Las Vegas, NV</p>
+        <p>Experience: 2-5 years in software development</p>
+        <p>Skills: JavaScript, React, Node.js</p>
+        <button class="apply-btn">Apply Now</button>
+    </div>
+
+    <div class="job-post">
+        <h3>Military Spouse Support: HR Specialist</h3>
+        <p>Location: Remote</p>
+        <p>Experience: 3+ years in HR</p>
+        <p>Skills: Recruitment, Onboarding, Employee Relations</p>
+        <button class="apply-btn">Apply Now</button>
+    </div>
+
+    <div class="job-post">
+        <h3>Diversity-Focused: Data Analyst</h3>
+        <p>Location: New York, NY</p>
+        <p>Experience: 1-3 years in data analytics</p>
+        <p>Skills: SQL, Python, Tableau</p>
+        <button class="apply-btn">Apply Now</button>
+    </div>
+</div>
+
+<div id="chatbot" onclick="openChatbot()">
+    Chat
+</div>
+
+</body>
+</html>
